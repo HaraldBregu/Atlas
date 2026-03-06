@@ -25,7 +25,11 @@
       "Bash(yarn test:between_sections:*)",
       "Bash(yarn test:mid_paragraph:*)",
       "Bash(yarn test:multi_language:*)",
-      "Bash(yarn test:content_type:*)"
+      "Bash(yarn test:content_type:*)",
+      "Bash(grep:*)",
+      "Bash(yarn:*)",
+      "Bash(yarn test:paired_markers:*)",
+      "Bash(yarn test:edge_case:*)"
     ]
   }
 }

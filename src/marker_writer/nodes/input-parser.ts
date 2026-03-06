@@ -151,7 +151,8 @@ export async function inputParserNode(
     if (isHeading) {
       markerPosition = 'AFTER_HEADING';
       operationType = 'FILL_SECTION';
-    } else if (trimmedBefore.endsWith('\n\n')) {
+    } else if (textBefore.endsWith('\n\n')) {
+      // marker follows a blank line — end of a paragraph/block
       markerPosition = 'END_OF_TEXT';
       operationType = 'CONTINUE';
     } else if (/[.!?]$/.test(lastChar)) {
