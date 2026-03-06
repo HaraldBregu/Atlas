@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock @langchain/openai before importing models so no real API keys are needed.
-vi.mock('@langchain/openai', () => {
-  const ChatOpenAI = vi.fn().mockImplementation((opts: Record<string, unknown>) => ({
-    _modelOpts: opts,
-    model: opts.model,
-    temperature: opts.temperature,
-    maxTokens: opts.maxTokens,
-  }));
-  return { ChatOpenAI };
-});
+// Use a regular function (not arrow) so `new ChatOpenAI(...)` works correctly.
+vi.mock('@langchain/openai', () => ({
+  ChatOpenAI: vi.fn(function (this: any, opts: Record<string, unknown>) {
+    this._modelOpts = opts;
+    this.model = opts.model;
+    this.temperature = opts.temperature;
+    this.maxTokens = opts.maxTokens;
+  }),
+}));
 
 import {
   createUnderstandingModel,

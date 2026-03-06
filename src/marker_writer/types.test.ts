@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import type { MarkerPosition, OperationType, ParsedInput } from '@/marker_writer/types';
+import type {
+  MarkerPosition,
+  OperationType,
+  ParsedInput,
+} from '@/marker_writer/types';
 
 // Type-level tests: verify the full set of union members at runtime via
 // exhaustive arrays. If the union grows we want tests to catch the gap.

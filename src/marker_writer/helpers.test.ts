@@ -15,14 +15,11 @@ import { MARKERS } from '@/marker_writer/markers';
 
 describe('stripAllMarkers', () => {
   it('removes a single CONTINUE marker', () => {
-    expect(stripAllMarkers(`hello${MARKERS.CONTINUE}world`)).toBe(
-      'helloworld',
-    );
+    expect(stripAllMarkers(`hello${MARKERS.CONTINUE}world`)).toBe('helloworld');
   });
 
   it('removes all marker types from a string', () => {
-    const text =
-      `before${MARKERS.REWRITE_START}middle${MARKERS.REWRITE_END}after`;
+    const text = `before${MARKERS.REWRITE_START}middle${MARKERS.REWRITE_END}after`;
     expect(stripAllMarkers(text)).toBe('beforemiddleafter');
   });
 
