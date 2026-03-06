@@ -181,7 +181,7 @@ export const config = {
 
 ```
 ============================================================
-Writing Continuation Agent
+Atlas
 ============================================================
 
 [system] Input text length: 156 characters
