@@ -1,6 +1,6 @@
 # Agent Graph Architecture
 
-The project contains two LangGraph state graphs: the **Writing Graph** (main continuation agent) and the **Marker Writer Graph** (marker-based writing agent).
+Atlas contains two LangGraph state graphs: the **Writing Graph** (main continuation agent) and the **Marker Writer Graph** (marker-based writing agent).
 
 ---
 
