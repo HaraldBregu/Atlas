@@ -94,7 +94,7 @@ async function interactiveMode(): Promise<void> {
 
   try {
     console.log('\n='.repeat(60));
-    console.log('Writing Continuation Agent - Interactive Mode');
+    console.log('Atlas - Interactive Mode');
     console.log('='.repeat(60) + '\n');
 
     const inputText = await question(
