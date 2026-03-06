@@ -23,7 +23,8 @@
     "test:paired_markers": "tsx tests/test-prompts.ts --category PAIRED_MARKERS",
     "test:edge_case": "tsx tests/test-prompts.ts --category EDGE_CASE",
     "test:voice_matching": "tsx tests/test-prompts.ts --category VOICE_MATCHING",
-    "test:single": "tsx tests/test-prompts.ts"
+    "test:single": "tsx tests/test-prompts.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "@langchain/anthropic": "^0.3.34",

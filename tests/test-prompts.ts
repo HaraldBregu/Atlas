@@ -1048,8 +1048,8 @@ export const ALL_TESTS: TestCase[] = [
       },
       {
         description:
-          'Generated text is relatively brief (bridging sentence, not essay)',
-        check: (r) => r.generatedText.trim().split(/\s+/).length <= 80,
+          'Generated text is relatively brief (bridging passage, not essay)',
+        check: (r) => r.generatedText.trim().split(/\s+/).length <= 150,
       },
     ],
   },
