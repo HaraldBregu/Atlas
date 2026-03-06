@@ -21,7 +21,8 @@
       "Bash(gh repo:*)",
       "Bash(where gh:*)",
       "Bash(yarn test:basic_position:*)",
-      "Bash(yarn test:mid_sentence:*)"
+      "Bash(yarn test:mid_sentence:*)",
+      "Bash(yarn test:between_sections:*)"
     ]
   }
 }

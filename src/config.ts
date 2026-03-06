@@ -3,7 +3,7 @@ export const config = {
   writerTemperature: 0.7,
   evaluatorTemperature: 0,
   formatterTemperature: 0.2,
-  passThreshold: 7.0,
+  passThreshold: 7,
   maxIterations: 3,
   continuationLength: '200-400 words',
 } as const;

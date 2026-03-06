@@ -10,11 +10,9 @@ export async function stitcherNode(
   let finalDocument: string;
 
   switch (p.operationType) {
-    case 'CONTINUE':
-    case 'FILL_SECTION': {
+    case 'CONTINUE': {
       let sep = '';
       if (p.isInsideSentence) sep = '';
-      else if (p.markerPosition === 'AFTER_HEADING') sep = '\n\n';
       else if (
         p.markerPosition === 'END_OF_TEXT' &&
         p.textBefore.endsWith('\n\n')
@@ -24,6 +22,15 @@ export async function stitcherNode(
       else sep = '';
 
       finalDocument = p.textBefore + sep + generated;
+      break;
+    }
+
+    case 'FILL_SECTION': {
+      // textAfter must be preserved — marker fills an empty section, but
+      // later sections in the document still follow.
+      const trailSep = p.textAfter.trim().length > 0 ? '\n\n' : '';
+      finalDocument =
+        p.textBefore + '\n\n' + generated + trailSep + p.textAfter.trimStart();
       break;
     }
 
