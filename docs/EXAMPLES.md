@@ -5,7 +5,7 @@
 Make sure you have an `OPENAI_API_KEY` in your `.env` file.
 
 ```bash
-npx tsx src/index.ts --input "The village sat at the edge of a vast forest that no one dared enter after dark."
+yarn writer --input "The village sat at the edge of a vast forest that no one dared enter after dark."
 ```
 
 ## Usage
@@ -13,19 +13,19 @@ npx tsx src/index.ts --input "The village sat at the edge of a vast forest that 
 ### Continue from text
 
 ```bash
-npx tsx src/index.ts --input "The ship had been drifting for three days. Supplies were low, and the crew had stopped speaking to one another."
+yarn writer --input "The ship had been drifting for three days. Supplies were low, and the crew had stopped speaking to one another."
 ```
 
 ### With instruction
 
 ```bash
-npx tsx src/index.ts --input "Coffee originated in Ethiopia." --instruction "keep writing"
+yarn writer --input "Coffee originated in Ethiopia." --instruction "keep writing"
 ```
 
 ### Read from file
 
 ```bash
-npx tsx src/index.ts --file input.txt
+yarn writer --file input.txt
 ```
 
 ## Graph Architecture
