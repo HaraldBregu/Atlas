@@ -10,6 +10,7 @@ async function main() {
   const inputText =
     'The ship had been drifting for three days. Supplies were low, and the crew had stopped speaking to one another.';
 
+  const start = Date.now();
   const result = await graph.invoke(
     { inputText, instruction: '' },
     { configurable: { thread_id: 'continue-test' } },
