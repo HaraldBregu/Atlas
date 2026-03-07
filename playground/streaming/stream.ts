@@ -32,6 +32,7 @@ async function main() {
     temperature,
     messages,
     response,
+    durationMs: Date.now() - start,
   });
 }
 
