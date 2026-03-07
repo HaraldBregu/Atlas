@@ -1,0 +1,1 @@
+Add more detail to the given text. Enrich it with specific examples, sensory descriptions, or supporting facts. Make the content more vivid and informative while keeping the original structure and tone.
