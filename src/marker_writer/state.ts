@@ -3,7 +3,6 @@ import type { StyleProfile, AssembledPrompt } from '@/marker_writer/types';
 
 export const WriterState = Annotation.Root({
   rawInput: Annotation<string>,
-  afterText: Annotation<string>,
   userInstruction: Annotation<string>,
 
   styleProfile: Annotation<StyleProfile>,

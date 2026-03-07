@@ -19,9 +19,7 @@ async function main() {
     console.log(
       '  --text "First paragraph." --after "Last paragraph." --instruction "bridge these sections"',
     );
-    console.log(
-      '  --text "" --instruction "write a poem about rain"',
-    );
+    console.log('  --text "" --instruction "write a poem about rain"');
     process.exit(1);
   }
 
