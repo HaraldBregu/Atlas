@@ -2,38 +2,42 @@
 
 LLM call with input text and an instruction to transform or extend it.
 
-## Expand text
+Instructions can be passed inline with `--instruction` or loaded from a `.md` file with `--file`.
+
+## Available instruction files
+
+- `expand.md` — expand text into a full paragraph
+- `rewrite-professional.md` — rewrite in professional tone
+- `summarize.md` — summarize into one or two sentences
+- `continue.md` — continue writing from where the text ends
+- `simplify.md` — simplify to everyday language
+- `fix-grammar.md` — fix grammar, spelling, and punctuation
+
+## Using instruction files
+
+```bash
+npx tsx playground/instructions/index.ts --input "Coffee originated in Ethiopia." --file expand
+npx tsx playground/instructions/index.ts --input "The meeting went okay I guess." --file rewrite-professional
+npx tsx playground/instructions/index.ts --input "The ship had been drifting for three days." --file summarize
+npx tsx playground/instructions/index.ts --input "The ship had been drifting for three days." --file continue
+npx tsx playground/instructions/index.ts --input "AI is very complecated and hard to undrestand." --file fix-grammar
+npx tsx playground/instructions/index.ts --input "Quantum entanglement is a phenomenon whereby two particles become interconnected." --file simplify
+```
+
+## Inline instruction
 
 ```bash
 npx tsx playground/instructions/index.ts --input "Coffee originated in Ethiopia." --instruction "expand this into a full paragraph"
 ```
 
-## Rewrite tone
-
-```bash
-npx tsx playground/instructions/index.ts --input "The meeting went okay I guess." --instruction "rewrite in a professional tone"
-```
-
-## Summarize
-
-```bash
-npx tsx playground/instructions/index.ts --input "The ship had been drifting for three days. Supplies were low, and the crew had stopped speaking to one another. On the fourth morning, a light appeared on the horizon." --instruction "summarize in one sentence"
-```
-
-## Continue writing
-
-```bash
-npx tsx playground/instructions/index.ts --input "The ship had been drifting for three days. Supplies were low, and the crew had stopped speaking to one another." --instruction "continue the story"
-```
-
 ## Stream response
 
 ```bash
-npx tsx playground/instructions/index.ts --stream --input "Coffee originated in Ethiopia." --instruction "expand this into a full paragraph"
+npx tsx playground/instructions/index.ts --stream --input "Coffee originated in Ethiopia." --file expand
 ```
 
 ## Limit output tokens
 
 ```bash
-npx tsx playground/instructions/index.ts --input "Coffee originated in Ethiopia." --instruction "expand this into a full paragraph" --max-tokens 100
+npx tsx playground/instructions/index.ts --input "Coffee originated in Ethiopia." --file expand --max-tokens 100
 ```
