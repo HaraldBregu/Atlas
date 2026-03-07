@@ -10,6 +10,7 @@ async function main() {
   const inputText = 'Coffee originated in Ethiopia.';
   const instruction = 'expand this into a full paragraph';
 
+  const start = Date.now();
   const result = await graph.invoke(
     { inputText, instruction },
     { configurable: { thread_id: 'instruction-test' } },
