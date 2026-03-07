@@ -27,7 +27,11 @@ async function main() {
   }
   messages.push({ role: 'user', content: prompt });
 
-  const model = new ChatOpenAI({ model: modelName, temperature });
+  const maxTokens = values['max-tokens']
+    ? parseInt(values['max-tokens'])
+    : undefined;
+
+  const model = new ChatOpenAI({ model: modelName, temperature, maxTokens });
 
   const start = Date.now();
   let content = '';
