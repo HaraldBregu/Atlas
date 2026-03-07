@@ -1,20 +1,9 @@
 import { Annotation } from '@langchain/langgraph';
-import type {
-  Intent,
-  StyleProfile,
-  AssembledPrompt,
-} from '@/marker_writer/types';
 
 export const WriterState = Annotation.Root({
-  rawInput: Annotation<string>,
-  userInstruction: Annotation<string>,
-
-  intent: Annotation<Intent>,
-  styleProfile: Annotation<StyleProfile>,
-  targetLength: Annotation<number>,
-  assembledPrompt: Annotation<AssembledPrompt>,
+  inputText: Annotation<string>,
+  instruction: Annotation<string>,
   generatedText: Annotation<string>,
-  finalDocument: Annotation<string>,
 });
 
 export type WriterStateValue = typeof WriterState.State;
