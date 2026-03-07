@@ -27,12 +27,16 @@ async function main() {
   });
 
   const input = values.input ?? '';
-  const instruction = values.instruction ?? '';
   const threadId = values.thread ?? 'playground';
+
+  let instruction = values.instruction ?? '';
+  if (values.file) {
+    instruction = loadFile('assistant', values.file);
+  }
 
   let systemPrompt = '';
   if (values['system-file']) {
-    systemPrompt = loadSystemFile(values['system-file']);
+    systemPrompt = loadFile('system', values['system-file']);
   }
 
   if (!input) {
