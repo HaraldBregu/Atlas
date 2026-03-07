@@ -32,7 +32,8 @@
       "Bash(yarn test:edge_case:*)",
       "Bash(yarn test:voice_matching:*)",
       "Write",
-      "Edit"
+      "Edit",
+      "Bash(chmod +x:*)"
     ]
   }
 }
