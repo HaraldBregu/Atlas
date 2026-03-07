@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { createWritingGraph } from '@/graph';
+import { createWritingGraph } from '../../src/graph';
 
 async function main() {
   const graph = createWritingGraph();
