@@ -16,6 +16,7 @@ async function main() {
 
   const model = new ChatOpenAI({ model: modelName, temperature });
 
+  const start = Date.now();
   const stream = await model.stream(messages);
 
   let response = '';
