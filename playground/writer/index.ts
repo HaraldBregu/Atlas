@@ -7,7 +7,11 @@ import { parseArgs } from 'util';
 import { createWritingGraph } from '../../src/graph';
 import { saveResult } from '../save-result';
 
-const instructionsDir = join(dirname(import.meta.filename), '..', 'instructions');
+const instructionsDir = join(
+  dirname(import.meta.filename),
+  '..',
+  'instructions',
+);
 
 function loadFile(folder: string, name: string): string {
   const filePath = name.endsWith('.md') ? name : `${name}.md`;
@@ -22,7 +26,6 @@ async function main() {
       'system-file': { type: 'string' },
       file: { type: 'string', short: 'f' },
       thread: { type: 'string' },
-      stream: { type: 'boolean' },
     },
   });
 
@@ -45,40 +48,22 @@ async function main() {
     process.exit(1);
   }
 
-  const graph = createWritingGraph();
-
   const inputText = [
     systemPrompt ? `System: ${systemPrompt}\n\n` : '',
     input,
     instruction ? `\n\nInstruction: ${instruction}` : '',
   ].join('');
 
+  const graph = createWritingGraph();
+
   const start = Date.now();
-
-  if (values.stream) {
-    const stream = graph.stream(
-      { inputText, instruction },
-      { configurable: { thread_id: threadId } },
-    );
-    for await (const chunk of await stream) {
-      const writerOutput = chunk.writer;
-      if (writerOutput?.generatedText) {
-        console.log('OUTPUT:', writerOutput.generatedText);
-      }
-    }
-  } else {
-    const result = await graph.invoke(
-      { inputText, instruction },
-      { configurable: { thread_id: threadId } },
-    );
-    console.log('INPUT:', input);
-    console.log('\nOUTPUT:', result.generatedText);
-  }
-
   const result = await graph.invoke(
     { inputText, instruction },
-    { configurable: { thread_id: `${threadId}-save` } },
+    { configurable: { thread_id: threadId } },
   );
+
+  console.log('INPUT:', input);
+  console.log('\nOUTPUT:', result.generatedText);
 
   saveResult(import.meta.filename, {
     model: 'gpt-4o',
