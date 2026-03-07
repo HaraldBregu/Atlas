@@ -42,3 +42,7 @@ npx tsx playground/basic/index.ts --model gpt-4o-mini --prompt "Say hello."
 ```bash
 npx tsx playground/basic/index.ts --model gpt-4o-mini --prompt "Tell me about the weather today." --system "You are a pirate. Respond in pirate speak."
 ```
+
+```bash
+npx tsx playground/basic/index.ts --stream --model gpt-4o-mini --prompt "Tell me about the weather today." --system "You are a pirate. Respond in pirate speak."
+```

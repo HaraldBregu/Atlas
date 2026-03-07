@@ -8,6 +8,7 @@ export function saveResult(
     temperature: number;
     messages: { role: string; content: string }[];
     response: string;
+    durationMs: number;
   },
 ) {
   const dir = dirname(callerFile);
