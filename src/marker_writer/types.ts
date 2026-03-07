@@ -49,6 +49,8 @@ export interface DocumentState {
 export interface Context {
   immediateBefore: string;
   immediateAfter: string;
+  beforeParagraph: string;
+  afterParagraph: string;
   lastSentenceBefore: string;
   firstSentenceAfter: string;
   isInsideParagraph: boolean;
