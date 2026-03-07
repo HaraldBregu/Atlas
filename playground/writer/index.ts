@@ -1,15 +1,26 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { parseArgs } from 'util';
 import { createWritingGraph } from '../../src/graph';
 import { saveResult } from '../save-result';
+
+function loadSystemFile(name: string): string {
+  const filePath = name.endsWith('.md') ? name : `${name}.md`;
+  return readFileSync(
+    join(dirname(import.meta.filename), 'system', filePath),
+    'utf-8',
+  ).trim();
+}
 
 async function main() {
   const { values } = parseArgs({
     options: {
       input: { type: 'string', short: 'i' },
       instruction: { type: 'string' },
+      'system-file': { type: 'string' },
       thread: { type: 'string' },
     },
   });
@@ -18,26 +29,38 @@ async function main() {
   const instruction = values.instruction ?? '';
   const threadId = values.thread ?? 'playground';
 
+  let systemPrompt = '';
+  if (values['system-file']) {
+    systemPrompt = loadSystemFile(values['system-file']);
+  }
+
   if (!input) {
     console.error('Provide --input');
     process.exit(1);
   }
 
+  const inputText = [
+    systemPrompt ? `System: ${systemPrompt}\n\n` : '',
+    input,
+    instruction ? `\n\nInstruction: ${instruction}` : '',
+  ].join('');
+
   const graph = createWritingGraph();
 
   const start = Date.now();
   const result = await graph.invoke(
-    { inputText: input, instruction },
+    { inputText, instruction },
     { configurable: { thread_id: threadId } },
   );
 
-  console.log('INPUT:', result.inputText);
+  console.log('INPUT:', input);
   console.log('\nOUTPUT:', result.generatedText);
 
   saveResult(import.meta.filename, {
     model: 'gpt-4o',
     temperature: 0.7,
     messages: [
+      ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
       {
         role: 'user',
         content: instruction
