@@ -24,6 +24,7 @@ async function main() {
     temperature: 0.7,
     messages: [{ role: 'user', content: inputText }],
     response: result.generatedText,
+    durationMs: Date.now() - start,
   });
 }
 
