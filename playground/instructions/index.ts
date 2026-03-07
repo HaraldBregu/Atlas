@@ -23,7 +23,16 @@ async function main() {
   const modelName = values.model ?? 'gpt-4o';
   const temperature = values.temperature ? parseFloat(values.temperature) : 0.7;
   const input = values.input ?? '';
-  const instruction = values.instruction ?? '';
+  let instruction = values.instruction ?? '';
+  if (values.file) {
+    const filePath = values.file.endsWith('.md')
+      ? values.file
+      : `${values.file}.md`;
+    instruction = readFileSync(
+      join(dirname(import.meta.filename), filePath),
+      'utf-8',
+    ).trim();
+  }
 
   if (!input && !instruction) {
     console.error('Provide --input and/or --instruction');
