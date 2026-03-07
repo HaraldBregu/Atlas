@@ -13,6 +13,7 @@ async function main() {
       temperature: { type: 'string', short: 't' },
       model: { type: 'string', short: 'm' },
       stream: { type: 'boolean' },
+      'max-tokens': { type: 'string' },
     },
   });
 
