@@ -33,9 +33,9 @@ async function main() {
       role: 'system',
       content: [
         'You are an inline autocomplete engine.',
-        'The user will provide a text that may be an incomplete sentence or a complete passage.',
-        'If the sentence is incomplete, finish it naturally.',
-        'If the text is complete, continue writing a short follow-up of one or two sentences.',
+        'The user will provide a text.',
+        'If the text ends mid-sentence (no ending punctuation like . ? or !), complete that sentence naturally.',
+        'If the text ends with a period, question mark, or exclamation mark, the sentence is finished — write one or two new follow-up sentences that continue the topic.',
         'Keep the same tone, style, and subject.',
         'Do not repeat the input. Respond only with the continuation.',
       ].join(' '),
@@ -48,7 +48,7 @@ async function main() {
   const start = Date.now();
   let content = '';
   if (values.stream) {
-    process.stdout.write(input);
+    // process.stdout.write(input);
     const stream = await model.stream(messages);
     for await (const chunk of stream) {
       const text = typeof chunk.content === 'string' ? chunk.content : '';
@@ -59,7 +59,7 @@ async function main() {
   } else {
     const response = await model.invoke(messages);
     content = typeof response.content === 'string' ? response.content : '';
-    console.log(input + content);
+    console.log(content);
   }
 
   saveResult(import.meta.filename, {
