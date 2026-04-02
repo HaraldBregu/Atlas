@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildAssistantPlan } from '@/assistant/agents/orchestrator/orchestrator-agent';
+import { buildAssistantPlan } from '@/agents/orchestrator/orchestrator-agent';
 
 describe('buildAssistantPlan', () => {
 	it('routes direct drafting requests to the writer without extra retrieval', () => {

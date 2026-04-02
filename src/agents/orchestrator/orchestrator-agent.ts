@@ -1,6 +1,6 @@
-import { ASSISTANT_STATE_MESSAGES } from '../../messages';
-import type { AssistantState } from '../../state';
-import type { AssistantResponseMode } from '../../types';
+import { ASSISTANT_STATE_MESSAGES } from '../../messages.js';
+import type { AssistantState } from '../../state.js';
+import type { AssistantResponseMode } from '../../types.js';
 
 export interface AssistantPlan {
 	mode: AssistantResponseMode;

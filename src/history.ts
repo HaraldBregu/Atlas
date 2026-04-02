@@ -4,7 +4,7 @@ import {
 	SystemMessage,
 	type BaseMessage,
 } from '@langchain/core/messages';
-import type { AgentHistoryMessage } from './types';
+import type { AgentHistoryMessage } from './types.js';
 
 export function toLangChainHistoryMessages(history: AgentHistoryMessage[]): BaseMessage[] {
 	return history

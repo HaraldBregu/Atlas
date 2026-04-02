@@ -1,0 +1,4 @@
+Prompt: Explain the assistant workflow in this project.
+
+Response:
+Dry-run response for: Explain the assistant workflow in this project.

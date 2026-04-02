@@ -1,89 +1,46 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
+import { Command } from 'commander';
+import path from 'node:path';
+import { runAssistant } from './run-assistant.js';
 
-import { program } from 'commander';
-import { readFileSync } from 'fs';
-import { createWritingGraph } from '@/graph';
-
-async function runWritingAgent(
-  inputText: string,
-  instruction: string,
-): Promise<void> {
-  console.log('\n' + '='.repeat(60));
-  console.log('Atlas');
-  console.log('='.repeat(60) + '\n');
-
-  const graph = createWritingGraph();
-
-  console.log(`[system] Input text length: ${inputText.length} characters\n`);
-
-  try {
-    const result = await graph.invoke(
-      {
-        inputText: inputText.trim(),
-        instruction,
-      },
-      { configurable: { thread_id: 'main' } },
-    );
-
-    console.log('ORIGINAL TEXT:\n');
-    console.log(result.inputText);
-    console.log('\n' + '-'.repeat(60) + '\n');
-    console.log('GENERATED TEXT:\n');
-    console.log(result.generatedText);
-    console.log('\n' + '='.repeat(60) + '\n');
-  } catch (error) {
-    console.error('\n[error] Failed to generate text:');
-    if (error instanceof Error) {
-      console.error(error.message);
-    } else {
-      console.error(error);
-    }
-    process.exit(1);
-  }
-}
-
-program.name('atlas').description('AI writing agent').version('1.0.0');
+const program = new Command();
 
 program
-  .option('--input <text>', 'Input text to continue')
-  .option('--file <path>', 'Read input from file')
-  .option('--instruction <text>', 'Instruction for the writer');
+	.name('atlas')
+	.description('Run the Atlas multi-agent assistant')
+	.argument('[prompt...]', 'prompt text')
+	.option('-p, --prompt <text>', 'prompt text')
+	.option('-w, --workspace <path>', 'workspace path used by the RAG agent', process.cwd())
+	.option('--dry-run', 'run with deterministic mock models instead of calling an API', false)
+	.action(async (promptParts: string[], options: { prompt?: string; workspace: string; dryRun: boolean }) => {
+		const prompt = resolvePrompt(promptParts, options.prompt);
+		if (!prompt) {
+			program.help({ error: true });
+		}
 
-program.parse();
+		try {
+			const output = await runAssistant({
+				prompt,
+				workspacePath: path.resolve(options.workspace),
+				dryRun: options.dryRun,
+			});
 
-const options = program.opts();
+			process.stdout.write(`${output.trimEnd()}\n`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			process.stderr.write(`${message}\n`);
+			process.exitCode = 1;
+		}
+	});
 
-async function main(): Promise<void> {
-  let inputText: string | null = null;
-  const instruction = (options.instruction as string) || '';
+await program.parseAsync(process.argv);
 
-  if (options.input) {
-    inputText = options.input as string;
-  } else if (options.file) {
-    try {
-      inputText = readFileSync(options.file as string, 'utf-8');
-    } catch (error) {
-      console.error(`Error reading file: ${(error as Error).message}`);
-      process.exit(1);
-    }
-  } else {
-    console.log('No input provided. Use --help for usage instructions.');
-    console.log('\nExamples:');
-    console.log('  npx tsx src/index.ts --input "Your text here..."');
-    console.log('  npx tsx src/index.ts --file input.txt');
-    console.log(
-      '  npx tsx src/index.ts --input "Your text" --instruction "keep writing"',
-    );
-    process.exit(1);
-  }
+function resolvePrompt(promptParts: string[], flagPrompt?: string): string {
+	const positionalPrompt = promptParts.join(' ').trim();
 
-  if (inputText) {
-    await runWritingAgent(inputText, instruction);
-  }
+	if (flagPrompt && flagPrompt.trim().length > 0) {
+		return flagPrompt.trim();
+	}
+
+	return positionalPrompt;
 }
-
-main().catch((error) => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-});

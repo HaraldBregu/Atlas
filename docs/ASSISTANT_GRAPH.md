@@ -24,7 +24,7 @@ orchestrator
 
 ## Layout
 
-- Implementation is grouped under `src/assistant/agents/`.
+- Implementation is grouped under `src/agents/`.
 - Each agent owns its prompt, execution logic, and any agent-specific helpers.
 - The LangGraph file still wires graph nodes, but the filesystem is organized by agent responsibility rather than node type.
 

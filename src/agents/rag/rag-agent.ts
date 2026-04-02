@@ -1,11 +1,11 @@
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { toLangChainHistoryMessages } from '../../history';
-import { ASSISTANT_STATE_MESSAGES } from '../../messages';
-import { loadPrompt } from '../../prompt-loader';
-import type { AssistantState } from '../../state';
-import { extractTextContent } from '../shared/text-content';
-import type { RagRetriever, RetrievedDocument } from './rag-retriever';
+import { toLangChainHistoryMessages } from '../../history.js';
+import { ASSISTANT_STATE_MESSAGES } from '../../messages.js';
+import { loadPrompt } from '../../prompt-loader.js';
+import type { AssistantState } from '../../state.js';
+import { extractTextContent } from '../shared/text-content.js';
+import type { RagRetriever, RetrievedDocument } from './rag-retriever.js';
 
 const SYSTEM_PROMPT = loadPrompt('./RAG_SYSTEM.md', import.meta.url);
 const NO_RAG_NEEDED = 'Workspace retrieval was not required for this request.';

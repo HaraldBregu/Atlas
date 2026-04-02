@@ -1,11 +1,11 @@
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { toLangChainHistoryMessages } from '../../history';
-import { ASSISTANT_STATE_MESSAGES } from '../../messages';
-import { loadPrompt } from '../../prompt-loader';
-import type { AssistantState } from '../../state';
-import type { WebSearchClient, WebSearchResult } from '../../types';
-import { extractTextContent } from '../shared/text-content';
+import { toLangChainHistoryMessages } from '../../history.js';
+import { ASSISTANT_STATE_MESSAGES } from '../../messages.js';
+import { loadPrompt } from '../../prompt-loader.js';
+import type { AssistantState } from '../../state.js';
+import type { WebSearchClient, WebSearchResult } from '../../types.js';
+import { extractTextContent } from '../shared/text-content.js';
 
 const SYSTEM_PROMPT = loadPrompt('./WEBSEARCH_SYSTEM.md', import.meta.url);
 const NO_WEB_SEARCH_NEEDED = 'Web search was not required for this request.';

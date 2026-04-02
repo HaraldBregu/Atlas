@@ -1,7 +1,7 @@
-import type { AgentDefinition } from './types';
-import { buildGraph, ASSISTANT_NODE } from './graph';
-import { ASSISTANT_STATE_MESSAGES } from './messages';
-import { RagRetriever } from './agents/rag/rag-retriever';
+import type { AgentDefinition } from './types.js';
+import { buildGraph, ASSISTANT_NODE } from './graph.js';
+import { ASSISTANT_STATE_MESSAGES } from './messages.js';
+import { RagRetriever } from './agents/rag/rag-retriever.js';
 
 const NODE_MODELS: AgentDefinition['nodeModels'] = {
 	[ASSISTANT_NODE.WEBSEARCH]: {
