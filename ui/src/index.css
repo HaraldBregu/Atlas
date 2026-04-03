@@ -23,6 +23,8 @@
   --font-display:
     'Avenir Next Condensed', 'Arial Narrow', 'Trebuchet MS', sans-serif;
   --font-body: 'Avenir Next', 'Segoe UI Variable', 'Helvetica Neue', sans-serif;
+  --font-mono:
+    'SFMono-Regular', 'SF Mono', 'Consolas', 'Liberation Mono', monospace;
   --color-text: #f4f0e8;
   --color-text-muted: rgba(244, 240, 232, 0.78);
   --color-accent: #ff9b62;

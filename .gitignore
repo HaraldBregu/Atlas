@@ -14,4 +14,7 @@ dist/
  
  dist 
 
+settings/*
+!settings/.gitkeep
+!settings/README.md
 

@@ -1,52 +1,43 @@
-import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
-import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { toLangChainHistoryMessages } from '../../history.js';
 import { ASSISTANT_STATE_MESSAGES } from '../../messages.js';
 import { loadPrompt } from '../../prompt-loader.js';
 import type { AssistantState } from '../../state.js';
-import { extractTextContent } from '../shared/text-content.js';
+import type { TextGenerationModel } from '../../types.js';
+import { createTextAgent } from '../shared/create-text-agent.js';
 
 const SYSTEM_PROMPT = loadPrompt('./WRITER_SYSTEM.md', import.meta.url);
 
+const generateWriterResponse = createTextAgent({
+  systemPrompt: SYSTEM_PROMPT,
+  mode: 'stream',
+  buildUserPrompt: (state: AssistantState) => buildHumanMessage(state),
+});
+
 export async function writerAgent(
-	state: typeof AssistantState.State,
-	model: BaseChatModel
-): Promise<Partial<typeof AssistantState.State>> {
-	const messages = [
-		new SystemMessage(SYSTEM_PROMPT),
-		...toLangChainHistoryMessages(state.history),
-		new HumanMessage(buildHumanMessage(state)),
-	];
+  state: AssistantState,
+  model: TextGenerationModel,
+): Promise<Partial<AssistantState>> {
+  const response = await generateWriterResponse(state, model);
 
-	let response = '';
-	const stream = await model.stream(messages);
-	for await (const chunk of stream) {
-		const token = extractTextContent(chunk.content);
-		if (token.length > 0) {
-			response += token;
-		}
-	}
-
-	return {
-		phaseLabel: ASSISTANT_STATE_MESSAGES.WRITING,
-		response,
-	};
+  return {
+    phaseLabel: ASSISTANT_STATE_MESSAGES.WRITING,
+    response,
+  };
 }
 
-function buildHumanMessage(state: typeof AssistantState.State): string {
-	return [
-		`Response mode: ${state.mode}`,
-		'',
-		'User request:',
-		state.prompt,
-		'',
-		'Orchestrator notes:',
-		`<planning_notes>\n${state.planningNotes || 'No planning notes.'}\n</planning_notes>`,
-		'',
-		'Web-search findings:',
-		`<web_findings>\n${state.webSearchFindings || 'No web-search findings.'}\n</web_findings>`,
-		'',
-		'Workspace retrieval findings:',
-		`<rag_findings>\n${state.ragFindings || 'No workspace findings.'}\n</rag_findings>`,
-	].join('\n');
+function buildHumanMessage(state: AssistantState): string {
+  return [
+    `Response mode: ${state.mode}`,
+    '',
+    'User request:',
+    state.prompt,
+    '',
+    'Orchestrator notes:',
+    `<planning_notes>\n${state.planningNotes || 'No planning notes.'}\n</planning_notes>`,
+    '',
+    'Web-search findings:',
+    `<web_findings>\n${state.webSearchFindings || 'No web-search findings.'}\n</web_findings>`,
+    '',
+    'Workspace retrieval findings:',
+    `<rag_findings>\n${state.ragFindings || 'No workspace findings.'}\n</rag_findings>`,
+  ].join('\n');
 }

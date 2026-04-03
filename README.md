@@ -1,6 +1,7 @@
 # Atlas
 
-Atlas is a small LangGraph-based multi-agent assistant.
+Atlas is a small multi-agent assistant built on a custom workflow runtime and
+OpenAI-compatible model clients.
 
 The current workflow is:
 

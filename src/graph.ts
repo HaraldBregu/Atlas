@@ -1,73 +1,89 @@
-import { END, START, StateGraph } from '@langchain/langgraph';
-import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
-import { AssistantState } from './state.js';
-import type { NodeModelMap, WebSearchClient } from './types.js';
 import { orchestratorAgent } from './agents/orchestrator/orchestrator-agent.js';
 import { ragAgent } from './agents/rag/rag-agent.js';
 import type { RagRetriever } from './agents/rag/rag-retriever.js';
 import { webSearchAgent } from './agents/websearch/websearch-agent.js';
 import { writerAgent } from './agents/writer/writer-agent.js';
+import type { AssistantState } from './state.js';
+import { createWorkflowRunner } from './runtime/workflow.js';
+import type {
+  NodeModelMap,
+  TextGenerationModel,
+  WebSearchClient,
+} from './types.js';
 
 export const ASSISTANT_NODE = {
-	ORCHESTRATOR: 'orchestrator',
-	WEBSEARCH: 'websearch',
-	RAG: 'rag',
-	WRITER: 'writer',
+  ORCHESTRATOR: 'orchestrator',
+  WEBSEARCH: 'websearch',
+  RAG: 'rag',
+  WRITER: 'writer',
 } as const;
 
 export interface AssistantNodeModels {
-	[ASSISTANT_NODE.WEBSEARCH]: BaseChatModel;
-	[ASSISTANT_NODE.RAG]: BaseChatModel;
-	[ASSISTANT_NODE.WRITER]: BaseChatModel;
+  [ASSISTANT_NODE.WEBSEARCH]: TextGenerationModel;
+  [ASSISTANT_NODE.RAG]: TextGenerationModel;
+  [ASSISTANT_NODE.WRITER]: TextGenerationModel;
 }
 
 export interface AssistantGraphDependencies {
-	retriever?: RagRetriever;
-	webSearchClient?: WebSearchClient;
+  retriever?: RagRetriever;
+  webSearchClient?: WebSearchClient;
 }
 
 export function buildGraph(
-	models: BaseChatModel | NodeModelMap,
-	dependencies: AssistantGraphDependencies = {}
+  models: TextGenerationModel | NodeModelMap,
+  dependencies: AssistantGraphDependencies = {},
 ) {
-	return new StateGraph(AssistantState)
-			.addNode(ASSISTANT_NODE.ORCHESTRATOR, (state: typeof AssistantState.State) =>
-				orchestratorAgent(state)
-			)
-			.addNode(ASSISTANT_NODE.WEBSEARCH, (state: typeof AssistantState.State) =>
-				webSearchAgent(
-					state,
-					resolveNodeModel(models, ASSISTANT_NODE.WEBSEARCH),
-					dependencies.webSearchClient
-				)
-			)
-			.addNode(ASSISTANT_NODE.RAG, (state: typeof AssistantState.State) =>
-				ragAgent(state, resolveNodeModel(models, ASSISTANT_NODE.RAG), dependencies.retriever)
-			)
-			.addNode(ASSISTANT_NODE.WRITER, (state: typeof AssistantState.State) =>
-				writerAgent(state, resolveNodeModel(models, ASSISTANT_NODE.WRITER))
-			)
-		.addEdge(START, ASSISTANT_NODE.ORCHESTRATOR)
-		.addEdge(ASSISTANT_NODE.ORCHESTRATOR, ASSISTANT_NODE.WEBSEARCH)
-		.addEdge(ASSISTANT_NODE.ORCHESTRATOR, ASSISTANT_NODE.RAG)
-		.addEdge([ASSISTANT_NODE.WEBSEARCH, ASSISTANT_NODE.RAG], ASSISTANT_NODE.WRITER)
-		.addEdge(ASSISTANT_NODE.WRITER, END)
-		.compile();
+  return createWorkflowRunner<AssistantState>([
+    {
+      steps: [(state) => orchestratorAgent(state)],
+    },
+    {
+      mode: 'parallel',
+      steps: [
+        (state) =>
+          webSearchAgent(
+            state,
+            resolveNodeModel(models, ASSISTANT_NODE.WEBSEARCH),
+            dependencies.webSearchClient,
+          ),
+        (state) =>
+          ragAgent(
+            state,
+            resolveNodeModel(models, ASSISTANT_NODE.RAG),
+            dependencies.retriever,
+          ),
+      ],
+    },
+    {
+      steps: [
+        (state) =>
+          writerAgent(state, resolveNodeModel(models, ASSISTANT_NODE.WRITER)),
+      ],
+    },
+  ]);
 }
 
-function resolveNodeModel(models: BaseChatModel | NodeModelMap, nodeName: string): BaseChatModel {
-	if (isBaseChatModel(models)) {
-		return models;
-	}
+function resolveNodeModel(
+  models: TextGenerationModel | NodeModelMap,
+  nodeName: string,
+): TextGenerationModel {
+  if (isTextGenerationModel(models)) {
+    return models;
+  }
 
-	const model = models[nodeName];
-	if (model === undefined) {
-		throw new Error(`Missing model for assistant node "${nodeName}".`);
-	}
+  const model = models[nodeName];
+  if (model === undefined) {
+    throw new Error(`Missing model for assistant node "${nodeName}".`);
+  }
 
-	return model;
+  return model;
 }
 
-function isBaseChatModel(models: BaseChatModel | NodeModelMap): models is BaseChatModel {
-	return typeof (models as BaseChatModel).invoke === 'function';
+function isTextGenerationModel(
+  models: TextGenerationModel | NodeModelMap,
+): models is TextGenerationModel {
+  return (
+    typeof (models as TextGenerationModel).generateText === 'function' &&
+    typeof (models as TextGenerationModel).streamText === 'function'
+  );
 }

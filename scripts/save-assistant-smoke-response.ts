@@ -4,9 +4,9 @@ import { runAssistant } from '../src/run-assistant.js';
 
 const prompt = 'Explain the assistant workflow in this project.';
 const response = await runAssistant({
-	prompt,
-	workspacePath: process.cwd(),
-	dryRun: true,
+  prompt,
+  workspacePath: process.cwd(),
+  dryRun: true,
 });
 
 const outputDirectory = path.resolve('tests/assistant/results');
@@ -18,5 +18,7 @@ await writeFile(outputPath, buildOutput(prompt, response), 'utf8');
 process.stdout.write(`${outputPath}\n`);
 
 function buildOutput(inputPrompt: string, output: string): string {
-	return [`Prompt: ${inputPrompt}`, '', 'Response:', output.trimEnd(), ''].join('\n');
+  return [`Prompt: ${inputPrompt}`, '', 'Response:', output.trimEnd(), ''].join(
+    '\n',
+  );
 }
