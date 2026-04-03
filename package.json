@@ -20,7 +20,10 @@
     "test:watch": "vitest",
     "test:assistant": "vitest run tests/assistant",
     "test:assistant:response": "vitest run tests/assistant/run-assistant.test.ts",
-    "test:assistant:watch": "vitest tests/assistant"
+    "test:assistant:watch": "vitest tests/assistant",
+    "ui:dev": "npm --prefix ui run dev",
+    "ui:build": "npm --prefix ui run build",
+    "ui:preview": "npm --prefix ui run preview"
   },
   "dependencies": {
     "@langchain/anthropic": "^0.3.34",
