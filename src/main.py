@@ -1,15 +1,25 @@
 from openai import OpenAI
 from dotenv import load_dotenv
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 load_dotenv()
 
 client = OpenAI()
 
-# 2. Simulated function implementation
-def get_weather(city):
+
+class WeatherParams(BaseModel):
+    city: str = Field(description="Name of the city")
+
+
+class WeatherResult(BaseModel):
+    city: str
+    temperature: float
+    condition: str
+
+
+def get_weather(params: WeatherParams) -> WeatherResult:
     # In real life, call an API here
-    return f"The weather in {city} is sunny and 22°C"
+    return WeatherResult(city=params.city, temperature=22.0, condition="sunny")
 
 
 def main() -> None:
@@ -19,16 +29,7 @@ def main() -> None:
             "type": "function",
             "name": "get_weather",
             "description": "Get current weather for a city",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "city": {
-                        "type": "string",
-                        "description": "Name of the city",
-                    }
-                },
-                "required": ["city"],
-            },
+            "parameters": WeatherParams.model_json_schema(),
         },
     ]
 
@@ -42,11 +43,10 @@ def main() -> None:
     # Check if model called get_weather, execute it, send result back
     for item in response.output:
         if item.type == "function_call" and item.name == "get_weather":
-            import json
-            args = json.loads(item.arguments)
-            result = get_weather(args["city"])
+            params = WeatherParams.model_validate_json(item.arguments)
+            result = get_weather(params)
 
-            print(f">>> [TOOL] get_weather({args['city']}) -> {result}", flush=True)
+            print(f">>> [TOOL] get_weather({params.city}) -> {result.model_dump_json()}", flush=True)
 
             # Send function result back, stream the final answer
             followup = client.responses.create(
@@ -58,7 +58,7 @@ def main() -> None:
                     {
                         "type": "function_call_output",
                         "call_id": item.call_id,
-                        "output": result,
+                        "output": result.model_dump_json(),
                     },
                 ],
                 stream=True,
