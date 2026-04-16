@@ -1,1 +1,0 @@
-Expand the given text into a full, detailed paragraph. Add context, supporting details, and depth while preserving the original meaning. Enrich the content with relevant background information and smooth transitions between ideas.

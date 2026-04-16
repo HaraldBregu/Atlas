@@ -1,1 +1,0 @@
-Continue writing from where the given text ends. Match the existing style, tone, and narrative direction. Maintain consistency with any established characters, setting, or subject matter. Move the content forward naturally without repeating what has already been said.
