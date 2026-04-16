@@ -35,7 +35,7 @@ def main() -> None:
 
     # First call — model may invoke function tools
     response = client.responses.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         tools=tools,
         input="What's the weather in Paris?",
     )
@@ -50,7 +50,7 @@ def main() -> None:
 
             # Send function result back, stream the final answer
             followup = client.responses.create(
-                model="gpt-4o",
+                model="gpt-4o-mini",
                 tools=tools,
                 input=[
                     {"type": "message", "role": "user", "content": "What's the weather in Paris?"},
