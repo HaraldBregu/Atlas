@@ -16,7 +16,13 @@ def main() -> None:
     )
 
     for event in response:
-        if event.type == "response.output_text.delta":
+        if event.type == "response.web_search_call.in_progress":
+            print(f">>> [TOOL] web_search started", flush=True)
+        elif event.type == "response.web_search_call.searching":
+            print(f">>> [TOOL] searching...", flush=True)
+        elif event.type == "response.web_search_call.completed":
+            print(f">>> [TOOL] web_search done\n", flush=True)
+        elif event.type == "response.output_text.delta":
             print(event.delta, end="", flush=True)
 
     print()
