@@ -1,8 +1,9 @@
 import type { Skill } from "./types.js";
 
-const skills = new Map<string, Skill>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const skills = new Map<string, Skill<any, any>>();
 
-export function registerSkill(skill: Skill): void {
+export function registerSkill(skill: Skill<any, any>): void {
   skills.set(skill.name, skill);
 }
 
