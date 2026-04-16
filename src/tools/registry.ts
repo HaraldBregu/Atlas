@@ -9,11 +9,11 @@ export function registerTool(tool: Tool<any, any>): void {
   tools.set(tool.name, tool);
 }
 
-export function getTool(name: string): Tool | undefined {
+export function getTool(name: string): Tool<any, any> | undefined {
   return tools.get(name);
 }
 
-export function getAllTools(): Tool[] {
+export function getAllTools(): Tool<any, any>[] {
   return Array.from(tools.values());
 }
 
