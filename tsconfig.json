@@ -4,12 +4,12 @@
     "module": "Node16",
     "moduleResolution": "Node16",
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "declaration": true
   },
-  "include": ["src", "ai", "tools", "skills", "mcp", "config", "utils"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
