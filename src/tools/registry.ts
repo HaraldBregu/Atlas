@@ -17,7 +17,7 @@ export function getAllTools(): Tool<any, any>[] {
   return Array.from(tools.values());
 }
 
-export function toolToFunction(tool: Tool): ChatCompletionTool {
+export function toolToFunction(tool: Tool<any, any>): ChatCompletionTool {
   return {
     type: "function",
     function: {
