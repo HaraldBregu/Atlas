@@ -36,6 +36,10 @@ def main() -> None:
             print(f">>> [TOOL] searching...", flush=True)
         elif event.type == "response.web_search_call.completed":
             print(f">>> [TOOL] web_search done\n", flush=True)
+        elif event.type == "response.function_call_arguments.delta":
+            print(f">>> [TOOL] get_weather args: {event.delta}", flush=True)
+        elif event.type == "response.function_call_arguments.done":
+            print(f">>> [TOOL] get_weather call done\n", flush=True)
         elif event.type == "response.output_text.delta":
             print(event.delta, end="", flush=True)
 
