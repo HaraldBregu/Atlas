@@ -7,10 +7,10 @@ export function registerSkill(skill: Skill<any, any>): void {
   skills.set(skill.name, skill);
 }
 
-export function getSkill(name: string): Skill | undefined {
+export function getSkill(name: string): Skill<any, any> | undefined {
   return skills.get(name);
 }
 
-export function getAllSkills(): Skill[] {
+export function getAllSkills(): Skill<any, any>[] {
   return Array.from(skills.values());
 }
