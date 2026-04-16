@@ -1,5 +1,15 @@
-node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
 dist/
+build/
+.eggs/
+.venv/
+venv/
 .env
-*.tsbuildinfo
+*.so
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
 .DS_Store
