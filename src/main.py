@@ -8,18 +8,16 @@ client = OpenAI()
 
 
 def main() -> None:
-    stream = client.chat.completions.create(
+    response = client.responses.create(
         model="gpt-4o",
-        messages=[
-            {"role": "user", "content": "Write a detailed essay about the history of artificial intelligence, from its origins to the present day."},
-        ],
+        tools=[{"type": "web_search_preview"}],
+        input="What are the latest news about AI agents today?",
         stream=True,
     )
 
-    for chunk in stream:
-        delta = chunk.choices[0].delta
-        if delta.content:
-            print(delta.content, end="", flush=True)
+    for event in response:
+        if event.type == "response.output_text.delta":
+            print(event.delta, end="", flush=True)
 
     print()
 
