@@ -2,9 +2,10 @@ import type { ChatCompletionTool } from "openai/resources/chat/completions";
 import { zodToJsonSchema } from "../utils/zod-to-json-schema.js";
 import type { Tool } from "./types.js";
 
-const tools = new Map<string, Tool>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const tools = new Map<string, Tool<any, any>>();
 
-export function registerTool(tool: Tool): void {
+export function registerTool(tool: Tool<any, any>): void {
   tools.set(tool.name, tool);
 }
 
