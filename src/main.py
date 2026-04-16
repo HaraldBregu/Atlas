@@ -10,8 +10,22 @@ client = OpenAI()
 def main() -> None:
     response = client.responses.create(
         model="gpt-4o",
-        tools=[{"type": "web_search_preview"}],
-        input="What are the latest news about AI agents today?",
+        tools=[
+            {"type": "web_search"},
+            {
+                "type": "function",
+                "name": "get_weather",
+                "description": "Get current weather for a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {"type": "string", "description": "City name"},
+                    },
+                    "required": ["location"],
+                },
+            },
+        ],
+        input="What is the situation in Ukraine right now?",
         stream=True,
     )
 
