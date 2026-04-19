@@ -15,14 +15,20 @@ class CityInfo(BaseModel):
 
 
 def main() -> None:
-    response = client.responses.parse(
+    with client.responses.stream(
         model="gpt-4o-mini",
         input="Give me info about Paris.",
         text_format=CityInfo,
-    )
+    ) as stream:
+        for event in stream:
+            if event.type == "response.output_text.delta":
+                print(event.delta, end="", flush=True)
 
-    city: CityInfo = response.output_parsed
-    print(city.model_dump_json(indent=2))
+        print()
+        final = stream.get_final_response()
+        city: CityInfo = final.output_parsed
+        print("\n--- parsed ---")
+        print(city.model_dump_json(indent=2))
 
 
 if __name__ == "__main__":
